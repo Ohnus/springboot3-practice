@@ -8,8 +8,12 @@
 Main Page
 <hr>
 {{#username}}
+    <form action="/board/read" method="get">
+        <input type="submit" value="글 목록 보기" />
+    </form>
+
     <form action="/user/update/{{username}}" method="get">
-        <input type="submit" value="수정하기" />
+        <input type="submit" value="회원 정보 수정" />
     </form>
 
     <form action="/logout" method="post">
