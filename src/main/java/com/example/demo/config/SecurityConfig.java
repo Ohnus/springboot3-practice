@@ -3,18 +3,21 @@ package com.example.demo.config;
 import com.example.demo.domain.user.entity.UserRoleType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 // 스프링 부트가 Config 클래스인 것을 인식하도록 하는 어노테이션
 @Configuration
 // 시큐리티 설정 활성화 위한 어노테이션
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     // 스프링 시큐리티에서는 로그인 과정(인증)에서 비밀번호를 암호화해서 저장해야 한다. 아래는 이 때 사용할 암호화 클래스.
@@ -51,7 +54,23 @@ public class SecurityConfig {
         // 로그인 방식 설정 : form 로그인 방식
         http.formLogin(Customizer.withDefaults());
 
+        http.logout(logout -> logout.logoutSuccessUrl("/"));
+
         return http.build();
+    }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests((auth) -> auth
+//                        .requestMatchers("/admin").permitAll());
+//        return http.build();
+//    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+
+        return web -> web.ignoring().requestMatchers("/img/**");
     }
 
 }
